@@ -1,4 +1,4 @@
-package org.projects;
+package org.projects.bossscheduler.scheduler;
 
 public class Course {
     private String id;

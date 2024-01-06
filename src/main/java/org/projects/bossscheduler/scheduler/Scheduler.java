@@ -1,4 +1,4 @@
-package org.projects.bossscheduler;
+package org.projects.bossscheduler.scheduler;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -31,21 +31,21 @@ public class Scheduler {
         put("THU", 3);
         put("FRI", 4);
     }};
-    final private static Map<Integer, String> invDayMap = new HashMap<>() {{
+    final public static Map<Integer, String> invDayMap = new HashMap<>() {{
         put(0, "MON");
         put(1, "TUE");
         put(2, "WED");
         put(3, "THU");
         put(4, "FRI");
     }};
-    final private static Map<Integer, String> invSlotMap = new HashMap<>() {{
+    final public static Map<Integer, String> invSlotMap = new HashMap<>() {{
         put(0, "0815-1130");
         put(1, "1200-1315");
         put(2, "1530-1845");
     }};
     private static Set<Integer> preferredDays;
     private Map<String, Integer> courseIdMapping = new HashMap<>();
-    private Map<Integer, String> invCourseIdMap = new HashMap<>();
+    private static Map<Integer, String> invCourseIdMap = new HashMap<>();
     private Literal[][][] slotsLiteral;
     private int[][][] preferences;
     private Set<CourseTuple> solutionSpace;
@@ -181,8 +181,12 @@ public class Scheduler {
 
     public void setInverseCourseIdMappings() {
         for (HashMap.Entry<String, Integer> entry : this.courseIdMapping.entrySet()) {
-            this.invCourseIdMap.put(entry.getValue(), entry.getKey());
+            invCourseIdMap.put(entry.getValue(), entry.getKey());
         }
+    }
+
+    public Map<Integer,String> getInverseCourseIdMappings() {
+        return invCourseIdMap;
     }
 
     public void startSolver(Scheduler scheduler, boolean verbose, int solutionLimit) {
@@ -210,6 +214,8 @@ public class Scheduler {
         model.addEquality(obj, result);
 
         model.clearObjective();
+
+        Scheduler.allSolutions = new ArrayList<>();
 
         solver.solve(model,cb);
 

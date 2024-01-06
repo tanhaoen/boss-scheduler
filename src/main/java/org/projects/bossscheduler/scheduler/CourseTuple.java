@@ -1,4 +1,4 @@
-package org.projects.bossscheduler;
+package org.projects.bossscheduler.scheduler;
 
 import java.util.Objects;
 
